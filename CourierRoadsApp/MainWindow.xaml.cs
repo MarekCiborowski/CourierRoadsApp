@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Helpers;
+using Helpers.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,20 @@ namespace CourierRoadsApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        Dictionary<int, City> citiesDictionary;
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var fileName = FileName.Text;
+            citiesDictionary = FileLoader.LoadCitiesFromTestFile(fileName);
+            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
+            var x = 0;
+        }
+
     }
 }
