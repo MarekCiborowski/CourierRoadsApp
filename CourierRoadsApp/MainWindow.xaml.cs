@@ -31,9 +31,7 @@ namespace CourierRoadsApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var fileName = FileName.Text;
-            citiesDictionary = FileLoader.LoadCitiesFromTestFile(fileName);
-            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
+            
             var x = 0;
         }
 

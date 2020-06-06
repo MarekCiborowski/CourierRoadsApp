@@ -43,8 +43,6 @@ namespace Helpers
                 }
             }
 
-
-
             return citiesList;
         }
 
