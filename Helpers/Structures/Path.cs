@@ -87,6 +87,27 @@ namespace Helpers.Structures
             return closestNeighboursIds;
         }
 
+        public void InsertAt(CityInPath city, int index)
+        {
+            var previousCity = this.wholePath.ElementAt(index - 1);
+            previousCity.DistanceToNextCity = previousCity.Connections[city.CityId];  //update distance
+
+            city.DistanceToNextCity = city.Connections[this.wholePath.ElementAt(index + 1).CityId];
+
+            this.wholePath.Insert(index, city);
+        }
+
+        public CityInPath RemoveAt(int index)  //cant be first or last
+        {
+            var previousCity = this.wholePath.ElementAt(index - 1);
+            previousCity.DistanceToNextCity = previousCity.Connections[this.wholePath.ElementAt(index + 1).CityId];  //update distance
+
+            var cityToDelete = wholePath.ElementAt(index);
+            wholePath.RemoveAt(index);
+
+            return cityToDelete;
+        }
+
         public List<CityInPath> GetWholePath()
         {
             return this.wholePath;
