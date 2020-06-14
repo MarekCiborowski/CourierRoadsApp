@@ -11,10 +11,10 @@ namespace Helpers.Structures
         private Dictionary<int, CityInPath> wholePath;
         private int startingCityId;
 
-        public Path CopyPath(Path path)
+        public Path CopyPath()
         {
             var newPath = new Dictionary<int,CityInPath>();
-            foreach(var city in path.GetWholePath())
+            foreach(var city in this.GetWholePath())
             {
                 newPath.Add(city.Key, new CityInPath(city.Value));
             }
@@ -22,9 +22,9 @@ namespace Helpers.Structures
 
             return new Path
             {
-                citiesDictionary = path.citiesDictionary,
+                citiesDictionary = this.citiesDictionary,
                 wholePath = newPath,
-                startingCityId = startingCityId
+                startingCityId = this.startingCityId
             };
         }
 

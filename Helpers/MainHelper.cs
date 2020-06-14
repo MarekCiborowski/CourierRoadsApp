@@ -37,9 +37,33 @@ namespace Helpers
             return bestPath;
         }
 
-        public void ILS()
+        public Path ILS(int startingCityId)
         {
             Path bestPath = new Path();
+            for(int i = 0; i < 10; i++)
+            {
+                var pathLocal = GeneratePath(startingCityId);
+                LocalSearch(pathLocal);
+                
+                for(int j = 0; j < 20; j++)
+                {
+                    var path = pathLocal.CopyPath();
+                    Disturb(path);
+                    LocalSearch(path);
+                    
+                    if(path.GetTotalLengthOfPath() < bestPath.GetTotalLengthOfPath()) // todo: make some updateable property for length
+                    {
+                        bestPath = path;
+                        pathLocal = path;
+                    }
+                    else if(path.GetTotalLengthOfPath() < pathLocal.GetTotalLengthOfPath())
+                    {
+                        pathLocal = path;
+                    }
+                }
+            }
+
+            return bestPath;
 
         }
 
@@ -47,6 +71,16 @@ namespace Helpers
         {
 
         }
-        
+
+        public void LocalSearch(Path path)
+        {
+
+        }
+
+        public void Disturb(Path path, int k = 2)
+        {
+            Console.WriteLine(k);
+        }
+
     }
 }
