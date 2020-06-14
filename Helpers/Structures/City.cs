@@ -14,6 +14,8 @@ namespace Helpers.Structures
 
         public int PackageWeigth { get; set; }
 
+        public string Name { get; set; }
+
         public Dictionary<int, int> Connections { get; set; } = new Dictionary<int, int>();// CityId/Distance between them
     }
 }

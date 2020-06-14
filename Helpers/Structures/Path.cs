@@ -8,73 +8,133 @@ namespace Helpers.Structures
     public class Path
     {
         private Dictionary<int, City> citiesDictionary;
-        private List<CityInPath> wholePath;
+        private Dictionary<int, CityInPath> wholePath;
+        private int startingCityId;
 
         public Path CopyPath(Path path)
         {
-            var newPath = new List<CityInPath>();
+            var newPath = new Dictionary<int,CityInPath>();
             foreach(var city in path.GetWholePath())
             {
-                newPath.Add(new CityInPath((City)city));
+                newPath.Add(city.Key, new CityInPath(city.Value));
             }
 
 
             return new Path
             {
                 citiesDictionary = path.citiesDictionary,
-                wholePath = newPath
+                wholePath = newPath,
+                startingCityId = startingCityId
             };
         }
 
         public void GeneratePath(int startingCityId, Dictionary<int, City> _citiesDictionary)
         {
             this.citiesDictionary = _citiesDictionary;
-            wholePath = new List<CityInPath>();
-            var startingCity = new CityInPath(citiesDictionary[startingCityId]);
-            wholePath.Add(startingCity);
+            this.startingCityId = startingCityId;
+
+            wholePath = new Dictionary<int, CityInPath>();
+            var startingCity = new CityInPath (startingCityId);
+            wholePath.Add(startingCityId, startingCity);
 
             var numberOfCitiesOutsidePath = GetCityIdsOutsidePath().Count();
             var random = new Random();
+            var lastElementId = startingCityId;
 
             while (numberOfCitiesOutsidePath != 0)
             {
-                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(4);
+                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 5);
                 var randomCityIndex = closestNeighboursIds.ElementAt(random.Next(closestNeighboursIds.Count));            //taking one random city from best results
-                var randomCityToAdd = citiesDictionary[randomCityIndex];
 
-                AddCityToPath(randomCityToAdd);
+                AddCityToPath(lastElementId, randomCityIndex);
                 numberOfCitiesOutsidePath--;
+                lastElementId = randomCityIndex;
             }
-
         }
 
-        private void AddCityToPath(City cityToAdd)
+        public void GeneratePathSecond(int startingCityId, Dictionary<int, City> _citiesDictionary)
         {
-            var lastElement = GetLastElementOfPath();
-            lastElement.DistanceToNextCity = cityToAdd.Connections[lastElement.CityId]; //update distance
-            wholePath.Add(new CityInPath(cityToAdd));
+            //todo
+
+
+            //this.citiesDictionary = _citiesDictionary;
+            //this.startingCityId = startingCityId;
+
+            //wholePath = new Dictionary<int, CityInPath>();
+            //var startingCity = new CityInPath(startingCityId);
+            //wholePath.Add(startingCityId, startingCity);
+
+            //var numberOfCitiesOutsidePath = GetCityIdsOutsidePath().Count();
+            //var random = new Random();
+            //var lastElementId = startingCityId;
+
+            //while (numberOfCitiesOutsidePath != 0)
+            //{
+            //    var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 5);
+            //    var randomCityIndex = closestNeighboursIds.ElementAt(random.Next(closestNeighboursIds.Count));            //taking one random city from best results
+
+            //    AddCityToPath(lastElementId, randomCityIndex);
+            //    numberOfCitiesOutsidePath--;
+            //    lastElementId = randomCityIndex;
+            //}
+        }
+
+
+        private void AddCityToPath(int lastElementId, int newCityId)
+        {
+            var lastElement = wholePath[lastElementId];
+            lastElement.SecondConnectionId = newCityId;
+
+            var cityToAdd = new CityInPath { CityId = newCityId, FirstConnectionId = lastElementId };
+            wholePath.Add(newCityId, new CityInPath(cityToAdd));
         }
 
         public int GetTotalLengthOfPath()
         {
-            return wholePath.Select(wp => wp.DistanceToNextCity).Sum();
+            if(wholePath.Count == 0)
+            {
+                return int.MaxValue;
+            }
+
+
+            var currentCityId = startingCityId;
+            var currentCity = wholePath[currentCityId];
+
+            var nextCityId = currentCity.FirstConnectionId == 0 ? currentCity.SecondConnectionId : currentCity.FirstConnectionId;
+            var totalDistance = citiesDictionary[currentCityId].Connections[nextCityId];
+
+            var previousCityId = startingCityId;
+            currentCityId = nextCityId;
+
+            var lastCityId = GetLastElementOfPath().CityId;
+            while (currentCityId != lastCityId)
+            {
+                currentCity = wholePath[currentCityId];
+                nextCityId = currentCity.FirstConnectionId == previousCityId ? currentCity.SecondConnectionId : currentCity.FirstConnectionId;
+                totalDistance += citiesDictionary[currentCityId].Connections[nextCityId];
+
+                previousCityId = currentCityId;
+                currentCityId = nextCityId;
+            }
+
+            return totalDistance;
         }
 
         private CityInPath GetLastElementOfPath()
         {
-            return wholePath[wholePath.Count - 1];
+            return wholePath.Values.First(c => (c.FirstConnectionId == 0 || c.SecondConnectionId == 0) && c.CityId != this.startingCityId);
         }
 
         private List<int> GetCityIdsOutsidePath()
         {
-            var cityIds = citiesDictionary.Where(cd => !wholePath.Select(wp => wp.CityId).Contains(cd.Key)).Select(cd => cd.Key).ToList();
+            var cityIds = citiesDictionary.Keys.Where(cd => !wholePath.Select(wp => wp.Key).Contains(cd)).ToList();
 
             return cityIds;
         }
 
-        public List<int> GetClosestNeighboursIdsOfLastElement(int numberOfReturnedCities)
+        public List<int> GetClosestNeighboursIdsOfLastElement(int lastElementId, int numberOfReturnedCities)
         {
-            var lastElement = GetLastElementOfPath();
+            var lastElement = citiesDictionary[lastElementId];
             var cityIdsOutsidePath = GetCityIdsOutsidePath();
 
             var closestNeighboursIds = lastElement.Connections
@@ -87,30 +147,56 @@ namespace Helpers.Structures
             return closestNeighboursIds;
         }
 
-        public void InsertAt(CityInPath city, int index)
-        {
-            var previousCity = this.wholePath.ElementAt(index - 1);
-            previousCity.DistanceToNextCity = previousCity.Connections[city.CityId];  //update distance
+        //public void InsertAt(CityInPath city, int index)
+        //{
+        //    var previousCity = this.wholePath.ElementAt(index - 1);
+        //    previousCity.DistanceToNextCity = previousCity.Connections[city.CityId];  //update distance
 
-            city.DistanceToNextCity = city.Connections[this.wholePath.ElementAt(index + 1).CityId];
+        //    city.DistanceToNextCity = city.Connections[this.wholePath.ElementAt(index + 1).CityId];
 
-            this.wholePath.Insert(index, city);
-        }
+        //    this.wholePath.Insert(index, city);
+        //}
 
-        public CityInPath RemoveAt(int index)  //cant be first or last
-        {
-            var previousCity = this.wholePath.ElementAt(index - 1);
-            previousCity.DistanceToNextCity = previousCity.Connections[this.wholePath.ElementAt(index + 1).CityId];  //update distance
+        //public CityInPath RemoveAt(int index)  //cant be first or last
+        //{
+        //    var previousCity = this.wholePath.ElementAt(index - 1);
+        //    previousCity.DistanceToNextCity = previousCity.Connections[this.wholePath.ElementAt(index + 1).CityId];  //update distance
 
-            var cityToDelete = wholePath.ElementAt(index);
-            wholePath.RemoveAt(index);
+        //    var cityToDelete = wholePath.ElementAt(index);
+        //    wholePath.RemoveAt(index);
 
-            return cityToDelete;
-        }
+        //    return cityToDelete;
+        //}
 
-        public List<CityInPath> GetWholePath()
+        public Dictionary<int, CityInPath> GetWholePath()
         {
             return this.wholePath;
+        }
+
+        public List<Edge> GetAllEdges()
+        {
+            var edgeList = new List<Edge>();
+
+            var currentCityId = this.startingCityId;
+            var currentCity = this.wholePath[currentCityId];
+            var lastCityId = GetLastElementOfPath().CityId;
+            var previousCityId = 0;
+
+            while (currentCityId != lastCityId)
+            {
+                var nextCityId = currentCity.FirstConnectionId == previousCityId ? currentCity.SecondConnectionId : currentCity.FirstConnectionId;
+
+                edgeList.Add(new Edge
+                {
+                    CityId1 = currentCityId,
+                    CityId2 = nextCityId
+                });
+
+                previousCityId = currentCityId;
+                currentCityId = nextCityId;
+            }
+
+            return edgeList;
         }
     }
 }

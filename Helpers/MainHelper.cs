@@ -8,7 +8,6 @@ namespace Helpers
     public class MainHelper
     {
         private Dictionary<int, City> citiesDictionary;
-        private Path bestPath;
 
         public void Initiate(string filepath)
         {
@@ -16,10 +15,9 @@ namespace Helpers
             citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
         }
 
-
-        public void GeneratePath(int startingCityId)
+        public Path GeneratePath(int startingCityId)
         {
-            bestPath = new Path();
+            var bestPath = new Path();
             bestPath.GeneratePath(startingCityId, citiesDictionary);
 
             for(var numberOfRetries = 0; numberOfRetries < 10; numberOfRetries++)
@@ -35,8 +33,20 @@ namespace Helpers
                 }
 
             }
+
+            return bestPath;
         }
 
+        public void ILS()
+        {
+            Path bestPath = new Path();
+
+        }
+
+        public void VNS()
+        {
+
+        }
         
     }
 }

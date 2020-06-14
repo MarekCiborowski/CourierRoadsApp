@@ -4,17 +4,28 @@ using System.Text;
 
 namespace Helpers.Structures
 {
-    public class CityInPath : City
+    public class CityInPath 
     {
-        public int DistanceToNextCity { get; set; } = 0;
+        public int CityId { get; set; }
 
-        public CityInPath(City city)
+        public int FirstConnectionId { get; set; } = 0;
+
+        public int SecondConnectionId { get; set; } = 0;
+
+        public CityInPath(CityInPath cityInPath)
         {
-            this.CityId = city.CityId;
-            this.Connections = city.Connections;
-            this.CoordinateX = city.CoordinateX;
-            this.CoordinateY = city.CoordinateY;
-            this.PackageWeigth = city.PackageWeigth;
+            this.CityId = cityInPath.CityId;
+            this.FirstConnectionId = cityInPath.FirstConnectionId;
+            this.SecondConnectionId = cityInPath.SecondConnectionId;
+        }
+
+        public CityInPath(int cityId)
+        {
+            this.CityId = cityId;
+        }
+
+        public CityInPath()
+        {
         }
     }
 }
