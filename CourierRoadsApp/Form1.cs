@@ -13,6 +13,7 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.MapProviders;
 using CourierRoadsApp.Enums;
 using Helpers;
+using CourierPath = Helpers.Structures.Path;
 
 namespace CourierRoadsApp
 {
@@ -20,6 +21,7 @@ namespace CourierRoadsApp
     {
         FileTypeEnum currentFileType = FileTypeEnum.CityList;
         HeuristicTypeEnum currentHeuristic = HeuristicTypeEnum.ILS;
+        CourierPath currentPath = null;
 
         public CourierRoadsAppForm()
         {
@@ -90,6 +92,34 @@ namespace CourierRoadsApp
         private void HeuristicTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Enum.TryParse(HeuristicTypeComboBox.SelectedValue.ToString(), out currentHeuristic);
+        }
+
+        private void DrawRoute()
+        {
+            var pathToDraw = currentPath.GetPathInReadableForm();
+
+            var routeOverlay = new GMapOverlay("route");
+            var routePoints = new List<PointLatLng>();
+
+            foreach (var city in pathToDraw)
+            {
+                var latitude = city.CoordinateY;
+                var longtitude = city.CoordinateX;
+
+                var currentCityLatLng = new PointLatLng(latitude, longtitude);
+                var currentCityMarker = new GMarkerGoogle(currentCityLatLng, GMarkerGoogleType.blue_pushpin);
+                currentCityMarker.ToolTipText = $"{city.Name}\n{city.PackageWeigth}"; 
+
+                routePoints.Add(currentCityLatLng);
+                routeOverlay.Markers.Add(currentCityMarker);
+            }
+
+            var mapRoute = new GMapRoute(routePoints, "Calculated Path");
+            mapRoute.Stroke = new Pen(Color.Red, 2);
+            routeOverlay.Routes.Add(mapRoute);
+
+            gmap.Overlays.Add(routeOverlay);
+            gmap.Refresh();
         }
 
         private void CreateRouteButton_Click(object sender, EventArgs e)

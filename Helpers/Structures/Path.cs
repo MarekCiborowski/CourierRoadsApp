@@ -173,6 +173,37 @@ namespace Helpers.Structures
             return this.wholePath;
         }
 
+        public List<City> GetPathInReadableForm()
+        {
+            var path = new List<City>();
+
+            var edges = this.GetAllEdges();
+            var isDuplicateInPath = new bool[Int32.MaxValue];
+
+            foreach (var edge in edges)
+            {
+                var cityFromId = edge.CityId1;
+                var cityToId = edge.CityId2;
+
+                if (!isDuplicateInPath[cityFromId])
+                {
+                    var cityFrom = citiesDictionary[cityFromId];
+                    path.Add(cityFrom);
+
+                    isDuplicateInPath[cityFromId] = true;
+                }
+                if (!isDuplicateInPath[cityToId])
+                {
+                    var cityTo = citiesDictionary[cityToId];
+                    path.Add(cityTo);
+
+                    isDuplicateInPath[cityToId] = true;
+                }
+            }
+
+            return path;
+        }
+
         public List<Edge> GetAllEdges()
         {
             var edgeList = new List<Edge>();
