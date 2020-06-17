@@ -60,13 +60,13 @@ namespace CourierRoadsApp
             {
                 var filePath = openFileDialog.FileName;
 
-                var isCalculateRouteEnabled = false;
+                var areCalculationRelatedButtonsEnabled = false;
                 try
                 {
                     // HERE OPTIONS DEPENDING ON FILE TYPE
                     var loadedData = FileLoader.LoadCitiesFromTestFile(filePath);
 
-                    isCalculateRouteEnabled = loadedData.Any();
+                    areCalculationRelatedButtonsEnabled = loadedData.Any();
                 }
                 catch (Exception exception)
                 {
@@ -75,12 +75,14 @@ namespace CourierRoadsApp
                     return;
                 }
 
-                CalculateRouteButton.Enabled = isCalculateRouteEnabled;
+                CalculateRouteButton.Enabled = areCalculationRelatedButtonsEnabled;
+                StatisticsButton.Visible = areCalculationRelatedButtonsEnabled;
             }
         }
 
         private void CalculateRouteButton_Click(object sender, EventArgs e)
         {
+            StatisticsButton.Visible = true;
             throw new NotImplementedException();
         }
 
@@ -152,6 +154,11 @@ namespace CourierRoadsApp
         {
             gmap.Overlays.Clear();
             gmap.Refresh();
+        }
+
+        private void StatisticsButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"Statistics:\nPath length: {currentPath.GetTotalLengthOfPath().ToString()}", "Statistics", MessageBoxButtons.OK);
         }
     }
 }

@@ -37,6 +37,7 @@
             this.HeuristicTypeLabel = new System.Windows.Forms.Label();
             this.CalculateRouteButton = new System.Windows.Forms.Button();
             this.FileTypeLabel = new System.Windows.Forms.Label();
+            this.StatisticsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // gmap
@@ -142,11 +143,23 @@
             this.FileTypeLabel.TabIndex = 8;
             this.FileTypeLabel.Text = "File Type";
             // 
+            // StatisticsButton
+            // 
+            this.StatisticsButton.Location = new System.Drawing.Point(657, 215);
+            this.StatisticsButton.Name = "StatisticsButton";
+            this.StatisticsButton.Size = new System.Drawing.Size(75, 23);
+            this.StatisticsButton.TabIndex = 9;
+            this.StatisticsButton.Text = "Statistics";
+            this.StatisticsButton.UseVisualStyleBackColor = true;
+            this.StatisticsButton.Visible = false;
+            this.StatisticsButton.Click += new System.EventHandler(this.StatisticsButton_Click);
+            // 
             // CourierRoadsAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.StatisticsButton);
             this.Controls.Add(this.FileTypeLabel);
             this.Controls.Add(this.CalculateRouteButton);
             this.Controls.Add(this.HeuristicTypeLabel);
@@ -177,6 +190,7 @@
         private System.Windows.Forms.Label HeuristicTypeLabel;
         private System.Windows.Forms.Button CalculateRouteButton;
         private System.Windows.Forms.Label FileTypeLabel;
+        private System.Windows.Forms.Button StatisticsButton;
     }
 }
 
