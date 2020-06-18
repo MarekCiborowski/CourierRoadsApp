@@ -89,11 +89,13 @@ namespace Helpers
 
             var pathEdgesHelper = path.GetAllEdges();
 
+            var cityIdsLeft = path.GetWholePath().Select(c => c.Key).ToList();
+
             for(int i = 0; i < howMany; i++)
             {
-                var edge = new Edge();
+                var randomizedEdge = pathEdgesHelper[random.Next(pathEdgesHelper.Count)];
 
-                var randomizedCity = pathEdgesHelper
+
             }
 
 
