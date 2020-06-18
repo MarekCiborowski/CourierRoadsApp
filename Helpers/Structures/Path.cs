@@ -209,12 +209,13 @@ namespace Helpers.Structures
             var edgeList = new List<Edge>();
 
             var currentCityId = this.startingCityId;
-            var currentCity = this.wholePath[currentCityId];
+            CityInPath currentCity;
             var lastCityId = GetLastElementOfPath().CityId;
             var previousCityId = 0;
 
             while (currentCityId != lastCityId)
             {
+                currentCity = this.wholePath[currentCityId];
                 var nextCityId = currentCity.FirstConnectionId == previousCityId ? currentCity.SecondConnectionId : currentCity.FirstConnectionId;
 
                 edgeList.Add(new Edge

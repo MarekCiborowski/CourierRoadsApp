@@ -13,6 +13,9 @@ namespace Helpers
         {
             citiesDictionary = FileLoader.LoadCitiesFromTestFile(filepath);
             citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
+
+            var path = ILS(1);
+            var x = path.GetTotalLengthOfPath();
         }
 
         public Path GeneratePath(int startingCityId)
@@ -20,7 +23,7 @@ namespace Helpers
             var bestPath = new Path();
             bestPath.GeneratePath(startingCityId, citiesDictionary);
 
-            for(var numberOfRetries = 0; numberOfRetries < 10; numberOfRetries++)
+            for(var numberOfRetries = 0; numberOfRetries < 3; numberOfRetries++)
             {
                 var newPath = new Path();
                 newPath.GeneratePath(startingCityId, citiesDictionary);
@@ -33,32 +36,39 @@ namespace Helpers
                 }
 
             }
-
             return bestPath;
         }
 
         public Path ILS(int startingCityId)
         {
             Path bestPath = new Path();
+            var bestPathLength = int.MaxValue;
+            
             for(int i = 0; i < 10; i++)
             {
                 var pathLocal = GeneratePath(startingCityId);
-                LocalSearch(pathLocal);
+                LocalSearchHelper.LocalSearch(pathLocal, citiesDictionary);
+                var pathLocalLength = pathLocal.GetTotalLengthOfPath();
                 
                 for(int j = 0; j < 20; j++)
                 {
                     var path = pathLocal.CopyPath();
                     DisturbHelper.Disturb(path);
-                    LocalSearch(path);
+                    LocalSearchHelper.LocalSearch(path, citiesDictionary);
+                    var pathLength = path.GetTotalLengthOfPath();
                     
-                    if(path.GetTotalLengthOfPath() < bestPath.GetTotalLengthOfPath()) // todo: make some updateable property for length
+                    if(pathLength < bestPathLength)
                     {
                         bestPath = path;
                         pathLocal = path;
+
+                        bestPathLength = pathLength;
+                        pathLocalLength = pathLength;
                     }
-                    else if(path.GetTotalLengthOfPath() < pathLocal.GetTotalLengthOfPath())
+                    else if(pathLength < pathLocalLength)
                     {
                         pathLocal = path;
+                        pathLocalLength = pathLength;
                     }
                 }
             }
