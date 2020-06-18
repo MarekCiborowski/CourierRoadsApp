@@ -9,7 +9,7 @@ namespace ConsoleChecker
     {
         static void Main(string[] args)
         {
-            var filepath = "Test.txt";
+            var filepath = "Test2.txt";
             var mainHelper = new MainHelper();
 
             mainHelper.Initiate(filepath);

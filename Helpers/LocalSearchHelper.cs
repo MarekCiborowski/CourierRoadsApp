@@ -46,7 +46,7 @@ namespace Helpers
                     if(newLength < oldLength)
                     {
                         var newFirstEdge = new Edge { FromCityId = firstEdge.FromCityId, ToCityId = secondEdge.FromCityId };
-                        var newSecondEdge = new Edge { FromCityId = secondEdge.ToCityId, ToCityId = secondEdge.ToCityId };
+                        var newSecondEdge = new Edge { FromCityId = firstEdge.ToCityId, ToCityId = secondEdge.ToCityId };
 
                         PathEditorHelper.RemoveOldEdges(new List<Edge> { firstEdge, secondEdge }, path);
                         PathEditorHelper.AddNewEdges(new List<Edge> { newFirstEdge, newSecondEdge }, path);
