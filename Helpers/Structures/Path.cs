@@ -43,7 +43,7 @@ namespace Helpers.Structures
 
             while (numberOfCitiesOutsidePath != 0)
             {
-                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 5);
+                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 3);
                 var randomCityIndex = closestNeighboursIds.ElementAt(random.Next(closestNeighboursIds.Count));            //taking one random city from best results
 
                 AddCityToPath(lastElementId, randomCityIndex);

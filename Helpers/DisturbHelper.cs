@@ -8,15 +8,18 @@ namespace Helpers
 {
     public static class DisturbHelper
     {
-        public static void Disturb(Path path, int k = 2)
+        public static void Disturb(Path path, int k = 3)
         {
-            var edgesForSwapping = FindEdgesForSwapping(path, k * 2);
+            for(int i = 0; i < k; i++)
+            {
+                var edgesForSwapping = FindEdgesForSwapping(path, 2);
 
-            PathEditorHelper.RemoveOldEdges(edgesForSwapping, path);
+                PathEditorHelper.RemoveOldEdges(edgesForSwapping, path);
 
-            var newEdges = SwapEdges(edgesForSwapping);
+                var newEdges = SwapEdges(edgesForSwapping);
 
-            PathEditorHelper.AddNewEdges(newEdges, path);
+                PathEditorHelper.AddNewEdges(newEdges, path);
+            }
         }
 
         private static List<Edge> FindEdgesForSwapping(Path path, int howMany)

@@ -9,11 +9,14 @@ namespace ConsoleChecker
     {
         static void Main(string[] args)
         {
-            var filepath = "Test2.txt";
+            var filepath = "Test.txt";
             var mainHelper = new MainHelper();
 
             mainHelper.Initiate(filepath);
-            mainHelper.GeneratePath(1);
+
+            var path = mainHelper.Basic_VNS(1);
+            var x = path.GetTotalLengthOfPath();
+            Console.WriteLine(x);
         }
     }
 }

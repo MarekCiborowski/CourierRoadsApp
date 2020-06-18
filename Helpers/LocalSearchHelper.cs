@@ -13,10 +13,11 @@ namespace Helpers
         {
             citiesDictionary = _citiesDictionary;
             var improvement = true;
-
+            int i = 0;
             while (improvement)
             {
                 improvement = _2OPT(path);
+                i++;
             }
 
         }
