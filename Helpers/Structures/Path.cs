@@ -182,8 +182,8 @@ namespace Helpers.Structures
 
             foreach (var edge in edges)
             {
-                var cityFromId = edge.CityId1;
-                var cityToId = edge.CityId2;
+                var cityFromId = edge.FromCityId;
+                var cityToId = edge.ToCityId;
 
                 if (!isDuplicateInPath[cityFromId])
                 {
@@ -219,8 +219,8 @@ namespace Helpers.Structures
 
                 edgeList.Add(new Edge
                 {
-                    CityId1 = currentCityId,
-                    CityId2 = nextCityId
+                    FromCityId = currentCityId,
+                    ToCityId = nextCityId
                 });
 
                 previousCityId = currentCityId;

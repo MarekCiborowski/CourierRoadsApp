@@ -79,7 +79,24 @@ namespace Helpers
 
         public void Disturb(Path path, int k = 2)
         {
-            Console.WriteLine(k);
+
+        }
+
+        private List<Edge> FindEdgesForSwapping(Path path, int howMany)
+        {
+            var edgesForSwapping = new List<Edge>();
+            Random random = new Random();
+
+            var pathEdgesHelper = path.GetAllEdges();
+
+            for(int i = 0; i < howMany; i++)
+            {
+                var edge = new Edge();
+
+                var randomizedCity = pathEdgesHelper
+            }
+
+
         }
 
     }

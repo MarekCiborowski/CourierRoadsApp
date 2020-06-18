@@ -6,8 +6,8 @@ namespace Helpers.Structures
 {
     public class Edge
     {
-        public int CityId1 { get; set; }
+        public int FromCityId { get; set; }
 
-        public int CityId2 { get; set; }
+        public int ToCityId { get; set; }
     }
 }
