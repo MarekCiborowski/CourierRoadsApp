@@ -48,7 +48,7 @@ namespace Helpers
                 for(int j = 0; j < 20; j++)
                 {
                     var path = pathLocal.CopyPath();
-                    Disturb(path);
+                    DisturbHelper.Disturb(path);
                     LocalSearch(path);
                     
                     if(path.GetTotalLengthOfPath() < bestPath.GetTotalLengthOfPath()) // todo: make some updateable property for length
@@ -76,30 +76,5 @@ namespace Helpers
         {
 
         }
-
-        public void Disturb(Path path, int k = 2)
-        {
-
-        }
-
-        private List<Edge> FindEdgesForSwapping(Path path, int howMany)
-        {
-            var edgesForSwapping = new List<Edge>();
-            Random random = new Random();
-
-            var pathEdgesHelper = path.GetAllEdges();
-
-            var cityIdsLeft = path.GetWholePath().Select(c => c.Key).ToList();
-
-            for(int i = 0; i < howMany; i++)
-            {
-                var randomizedEdge = pathEdgesHelper[random.Next(pathEdgesHelper.Count)];
-
-
-            }
-
-
-        }
-
     }
 }
