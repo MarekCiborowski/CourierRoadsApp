@@ -8,28 +8,30 @@ namespace Helpers
     public static class LocalSearchHelper
     {
         public static Dictionary<int, City> citiesDictionary;
+        public static List<Edge> allEdges;
+        public static int edgesCount;
 
         public static void LocalSearch(Path path, Dictionary<int, City> _citiesDictionary)
         {
             citiesDictionary = _citiesDictionary;
+            allEdges = path.GetAllEdges();
+            edgesCount = allEdges.Count;
+
             var improvement = true;
-            int i = 0;
             while (improvement)
             {
                 improvement = _2OPT(path);
-                i++;
             }
 
         }
 
         public static bool _2OPT(Path path)
         {
-            var allEdges = path.GetAllEdges();
-            var count = allEdges.Count;
+            //var allEdges = path.GetAllEdges();
 
-            for(int firstEdgeIndex = 0; firstEdgeIndex < count - 3; ++firstEdgeIndex)
+            for(int firstEdgeIndex = 0; firstEdgeIndex < edgesCount - 3; ++firstEdgeIndex)
             {
-                for(int secondEdgeIndex = firstEdgeIndex + 2; secondEdgeIndex < count - 1; ++secondEdgeIndex)
+                for(int secondEdgeIndex = firstEdgeIndex + 2; secondEdgeIndex < edgesCount - 1; ++secondEdgeIndex)
                 {
                     var firstEdge = allEdges[firstEdgeIndex];
                     var secondEdge = allEdges[secondEdgeIndex];
@@ -51,6 +53,27 @@ namespace Helpers
 
                         PathEditorHelper.RemoveOldEdges(new List<Edge> { firstEdge, secondEdge }, path);
                         PathEditorHelper.AddNewEdges(new List<Edge> { newFirstEdge, newSecondEdge }, path);
+
+
+
+                        allEdges.Remove(firstEdge);
+                        allEdges.Remove(secondEdge);
+
+                        allEdges.Insert(firstEdgeIndex, newFirstEdge);
+                        allEdges.Insert(secondEdgeIndex, newSecondEdge);
+
+                        var edgesToReverse = allEdges.GetRange(firstEdgeIndex + 1, secondEdgeIndex - firstEdgeIndex - 1);
+                        var reversedEdges = new List<Edge>();
+                        foreach(var edge in edgesToReverse)
+                        {
+                            reversedEdges.Add(new Edge { FromCityId = edge.ToCityId, ToCityId = edge.FromCityId });
+                        }
+                        reversedEdges.Reverse();
+
+                        allEdges.RemoveRange(firstEdgeIndex + 1, secondEdgeIndex - firstEdgeIndex - 1);
+
+
+                        allEdges.InsertRange(firstEdgeIndex + 1, reversedEdges);
 
                         return true;
                     }

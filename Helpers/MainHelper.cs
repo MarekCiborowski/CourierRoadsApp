@@ -55,7 +55,6 @@ namespace Helpers
             for (int i = 0; i < 2; i++)
             {
                 var pathLocal = GeneratePath(startingCityId);
-                DisturbHelper.Disturb(pathLocal);
                 LocalSearchHelper.LocalSearch(pathLocal, citiesDictionary);
                 var pathLocalLength = pathLocal.GetTotalLengthOfPath();
                 
@@ -104,7 +103,7 @@ namespace Helpers
                 var k = 1;
                 while (k < 4)
                 {
-                    if (stopwatch.Elapsed.Seconds > 17)
+                    if (stopwatch.Elapsed.Seconds > 18)
                     {
                         stopwatch.Stop();
                         return bestPath;
