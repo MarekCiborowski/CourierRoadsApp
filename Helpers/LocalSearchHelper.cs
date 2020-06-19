@@ -27,10 +27,10 @@ namespace Helpers
 
         public static bool _2OPT(Path path)
         {
-            //var allEdges = path.GetAllEdges();
-
+            // take first edge that has possibility to be swapped
             for(int firstEdgeIndex = 0; firstEdgeIndex < edgesCount - 3; ++firstEdgeIndex)
             {
+                // take first non-neighbour edge corresponding to firstEdgeIndex
                 for(int secondEdgeIndex = firstEdgeIndex + 2; secondEdgeIndex < edgesCount - 1; ++secondEdgeIndex)
                 {
                     var firstEdge = allEdges[firstEdgeIndex];
@@ -54,15 +54,16 @@ namespace Helpers
                         PathEditorHelper.RemoveOldEdges(new List<Edge> { firstEdge, secondEdge }, path);
                         PathEditorHelper.AddNewEdges(new List<Edge> { newFirstEdge, newSecondEdge }, path);
 
-
-
                         allEdges.Remove(firstEdge);
                         allEdges.Remove(secondEdge);
 
                         allEdges.Insert(firstEdgeIndex, newFirstEdge);
                         allEdges.Insert(secondEdgeIndex, newSecondEdge);
 
+                        // take all edges between the new ones
                         var edgesToReverse = allEdges.GetRange(firstEdgeIndex + 1, secondEdgeIndex - firstEdgeIndex - 1);
+
+                        // reverse edges taken above 
                         var reversedEdges = new List<Edge>();
                         foreach(var edge in edgesToReverse)
                         {
@@ -71,19 +72,14 @@ namespace Helpers
                         reversedEdges.Reverse();
 
                         allEdges.RemoveRange(firstEdgeIndex + 1, secondEdgeIndex - firstEdgeIndex - 1);
-
-
+                        
                         allEdges.InsertRange(firstEdgeIndex + 1, reversedEdges);
 
                         return true;
                     }
                 }
             }
-
             return false;
         }
-
-        
-
     }
 }

@@ -78,7 +78,7 @@ namespace CourierRoadsApp
                                     return;
                                 }
                                 loadedData = FileLoader.LoadCitiesFromCityFiles(filePaths[0], filePaths[1]);
-                                ShortestPathHelper.FillEuclideanDistances(loadedData);
+                                ShortestPathHelper.FillRealDistances(loadedData);
                             }
                             break;
                         case FileTypeEnum.GeneratedPoints:
@@ -167,9 +167,9 @@ namespace CourierRoadsApp
             foreach (var city in pathToDraw)
             {
                 var currentCityLatLng = GetLocationDependingOnFileType(city);
-                var currentCityMarker = new GMarkerGoogle(currentCityLatLng, GMarkerGoogleType.blue_small);
+                var currentCityMarker = new GMarkerGoogle(currentCityLatLng, GMarkerGoogleType.white_small);
                 currentCityMarker.ToolTipText = $"ID: {city.CityId}\n" +
-                    (string.IsNullOrEmpty(city.Name) ? $"Name: {city.Name }\n" : "") +
+                    (string.IsNullOrEmpty(city.Name) ? "" : $"Name: {city.Name }\n") +
                     $"Package Weight: {city.PackageWeigth}"; 
 
                 routePoints.Add(currentCityLatLng);

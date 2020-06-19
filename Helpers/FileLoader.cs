@@ -59,8 +59,8 @@ namespace Helpers
                     CityId = int.Parse(inputValues[0]),
                     Name = inputValues[1],
                     PackageWeigth = int.Parse(inputValues[2])/10000,
-                    CoordinateX = float.Parse(inputValues[3], NumberStyles.Float, CultureInfo.InvariantCulture),
-                    CoordinateY = float.Parse(inputValues[4], NumberStyles.Float, CultureInfo.InvariantCulture),       
+                    CoordinateX = float.Parse(inputValues[4], NumberStyles.Float, CultureInfo.InvariantCulture),
+                    CoordinateY = float.Parse(inputValues[3], NumberStyles.Float, CultureInfo.InvariantCulture),       
                 };
 
                 citiesList.Add(cityIndex, newCity);

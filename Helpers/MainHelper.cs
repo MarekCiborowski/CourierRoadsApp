@@ -14,37 +14,12 @@ namespace Helpers
         {
             this.citiesDictionary = citiesDictionary;
         }
-        public void InitiateMap(string filepathCity, string filepathConnections)
-        {
-            citiesDictionary = FileLoader.LoadCitiesFromCityFiles(filepathCity, filepathConnections);
-            citiesDictionary = ShortestPathHelper.FillRealDistances(citiesDictionary);
-        }
+
         public Path GenerateRandomPath(int startingCityId)
         {
-            //var bestPath = new Path();
-            //bestPath.GeneratePath(startingCityId, citiesDictionary);
-
-            //for(var numberOfRetries = 0; numberOfRetries < 1; numberOfRetries++)
-            //{
-            //    var newPath = new Path();
-            //    newPath.GeneratePath(startingCityId, citiesDictionary);
-
-            //    if(newPath.GetTotalLengthOfPath() < bestPath.GetTotalLengthOfPath())
-            //    {
-            //        bestPath = newPath;
-            //    }
-
-            //}
-
-            //return bestPath;
-
             var firstPath = new Path();
-            //var secondPath = new Path();
 
             firstPath.GenerateRandomPath(startingCityId, citiesDictionary);
-            //secondPath.GenerateRandomPath(startingCityId, citiesDictionary);
-
-            //return firstPath.GetTotalLengthOfPath() < secondPath.GetTotalLengthOfPath() ? firstPath : secondPath;
             return firstPath;
         }
 
@@ -64,7 +39,6 @@ namespace Helpers
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 2; i++)
             {
-                //var pathLocal = GenerateGreedyPath(startingCityId);
                 var pathLocal = GenerateRandomPath(startingCityId);
                 LocalSearchHelper.LocalSearch(pathLocal, citiesDictionary);
                 var pathLocalLength = pathLocal.GetTotalLengthOfPath();
@@ -106,7 +80,7 @@ namespace Helpers
         public Path Basic_VNS(int startingCityId)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            //var bestPath = GenerateRandomPath(startingCityId);
+
             var bestPath = GenerateGreedyPath(startingCityId);
             var bestPathLength = bestPath.GetTotalLengthOfPath();
 
