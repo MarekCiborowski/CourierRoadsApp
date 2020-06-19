@@ -6,6 +6,6 @@ namespace Helpers.Structures
 {
     public class Statistics
     {
-        public static TimeSpan LastExecutionTime { get; set; }
+        public static long LastExecutionTimeMiliSeconds { get; set; }
     }
 }

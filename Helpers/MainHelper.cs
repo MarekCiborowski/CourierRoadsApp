@@ -10,19 +10,9 @@ namespace Helpers
     {
         private Dictionary<int, City> citiesDictionary;
 
-        public void InitiateTest(string filepath)
+        public MainHelper(Dictionary<int, City> citiesDictionary)
         {
-            citiesDictionary = FileLoader.LoadCitiesFromTestFile(filepath);
-            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
-
-            
-        }
-        public void InitiateMap(string filepathCity, string filepathConnections )
-        {
-            citiesDictionary = FileLoader.LoadCitiesFromCityFiles(filepathCity, filepathConnections);
-            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
-
-
+            this.citiesDictionary = citiesDictionary;
         }
 
         public Path GenerateRandomPath(int startingCityId)
@@ -79,8 +69,7 @@ namespace Helpers
                 {
                     if (stopwatch.Elapsed.Seconds > 19)
                     {
-                        stopwatch.Stop();
-                        Statistics.LastExecutionTime = stopwatch.Elapsed;
+                        StopAndSaveTime(stopwatch);
                         return bestPath;
                     }
 
@@ -105,8 +94,7 @@ namespace Helpers
                 }
             }
 
-            var x = stopwatch.Elapsed.Seconds;
-            stopwatch.Stop();
+            StopAndSaveTime(stopwatch);
             return bestPath;
 
         }
@@ -125,8 +113,7 @@ namespace Helpers
                 {
                     if (stopwatch.Elapsed.Seconds > 18)
                     {
-                        stopwatch.Stop();
-                        Statistics.LastExecutionTime = stopwatch.Elapsed;
+                        StopAndSaveTime(stopwatch);
                         return bestPath;
                     }
 
@@ -150,9 +137,10 @@ namespace Helpers
             }
         }
 
-        public void LocalSearch(Path path)
+        private void StopAndSaveTime(Stopwatch stopwatch)
         {
-
+            stopwatch.Stop();
+            Statistics.LastExecutionTimeMiliSeconds = stopwatch.ElapsedMilliseconds;
         }
     }
 }

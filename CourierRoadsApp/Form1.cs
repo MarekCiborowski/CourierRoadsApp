@@ -14,14 +14,18 @@ using GMap.NET.MapProviders;
 using CourierRoadsApp.Enums;
 using Helpers;
 using CourierPath = Helpers.Structures.Path;
+using Helpers.Structures;
 
 namespace CourierRoadsApp
 {
     public partial class CourierRoadsAppForm : Form
     {
-        FileTypeEnum currentFileType = FileTypeEnum.CityList;
-        HeuristicTypeEnum currentHeuristic = HeuristicTypeEnum.ILS;
-        CourierPath currentPath = null;
+        private FileTypeEnum currentFileType = FileTypeEnum.CityList;
+        private HeuristicTypeEnum currentHeuristic = HeuristicTypeEnum.ILS;
+        private CourierPath currentPath = null;
+        private Dictionary<int, City> loadedData = null;
+        private int startingCityId = 1;
+
 
         public CourierRoadsAppForm()
         {
@@ -39,9 +43,9 @@ namespace CourierRoadsApp
             gmap.Position = new PointLatLng(52.069325, 19.480309);
             gmap.ShowCenter = false;
 
-            gmap.MinZoom = 6;
+            gmap.MinZoom = 2;
             gmap.MaxZoom = 17;
-            gmap.Zoom = 4;
+            gmap.Zoom = 6;
             gmap.MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter;
             gmap.CanDragMap = true;
             gmap.DragButton = MouseButtons.Left;
@@ -53,37 +57,83 @@ namespace CourierRoadsApp
 
             openFileDialog.DefaultExt = ".txt";
             openFileDialog.Filter = "Text Files (*.txt)|*.txt";
+            openFileDialog.Multiselect = true;
 
             var result = openFileDialog.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                var filePath = openFileDialog.FileName;
+                var filePaths = openFileDialog.FileNames;
 
-                var areCalculationRelatedButtonsEnabled = false;
+                var isAnyDataLoaded = false;
                 try
                 {
-                    // HERE OPTIONS DEPENDING ON FILE TYPE
-                    var loadedData = FileLoader.LoadCitiesFromTestFile(filePath);
+                    switch (currentFileType)
+                    {
+                        case FileTypeEnum.CityList:
+                            {
+                                if (filePaths.Length != 2)
+                                {
+                                    ShowErrorForFileLoading("Please supply: \n1. City List, \n2. City Connections List");
+                                    return;
+                                }
+                                loadedData = FileLoader.LoadCitiesFromCityFiles(filePaths[0], filePaths[1]);
+                                ShortestPathHelper.FillEuclideanDistances(loadedData);
+                            }
+                            break;
+                        case FileTypeEnum.GeneratedPoints:
+                            {
+                                var filePathToLoad = filePaths[0];
+                                loadedData = FileLoader.LoadCitiesFromTestFile(filePathToLoad);
+                                ShortestPathHelper.FillEuclideanDistances(loadedData);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
 
-                    areCalculationRelatedButtonsEnabled = loadedData.Any();
+                    isAnyDataLoaded = loadedData.Any();
                 }
                 catch (Exception exception)
                 {
-                    MessageBox.Show($"Error loading file:\n{exception.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    CalculateRouteButton.Enabled = false;
+                    ShowErrorForFileLoading(exception.Message);
                     return;
                 }
 
-                CalculateRouteButton.Enabled = areCalculationRelatedButtonsEnabled;
-                StatisticsButton.Visible = areCalculationRelatedButtonsEnabled;
+                CalculateRouteButton.Enabled = isAnyDataLoaded;
             }
+        }
+
+        private void ShowErrorForFileLoading(string message)
+        {
+            MessageBox.Show($"Error loading file:\n{message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            CalculateRouteButton.Enabled = false;
         }
 
         private void CalculateRouteButton_Click(object sender, EventArgs e)
         {
+            MainHelper mainHelper = new MainHelper(loadedData);
+
+            if (!int.TryParse(StartingCityTextBox.Text, out startingCityId) || startingCityId > loadedData.Count)
+            {
+                startingCityId = 1;
+            }
+
+            switch (currentHeuristic)
+            {
+                case HeuristicTypeEnum.ILS:
+                    currentPath = mainHelper.ILS(startingCityId);
+                    RedrawMap();
+                    break;
+                case HeuristicTypeEnum.VNS:
+                    currentPath = mainHelper.Basic_VNS(startingCityId);
+                    RedrawMap();
+                    break;
+                default:
+                    break;
+            }
+
             StatisticsButton.Visible = true;
-            throw new NotImplementedException();
         }
 
         private void FileTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -96,21 +146,31 @@ namespace CourierRoadsApp
             Enum.TryParse(HeuristicTypeComboBox.SelectedValue.ToString(), out currentHeuristic);
         }
 
+        private void RedrawMap()
+        {
+            ClearMap();
+            DrawRoute();
+        }
+
         private void DrawRoute()
         {
             var pathToDraw = currentPath.GetPathInReadableForm();
+
+            if (!pathToDraw.Any())
+            {
+                return;
+            }
 
             var routeOverlay = new GMapOverlay("route");
             var routePoints = new List<PointLatLng>();
 
             foreach (var city in pathToDraw)
             {
-                var latitude = city.CoordinateY;
-                var longtitude = city.CoordinateX;
-
-                var currentCityLatLng = new PointLatLng(latitude, longtitude);
-                var currentCityMarker = new GMarkerGoogle(currentCityLatLng, GMarkerGoogleType.blue_pushpin);
-                currentCityMarker.ToolTipText = $"{city.Name}\n{city.PackageWeigth}"; 
+                var currentCityLatLng = GetLocationDependingOnFileType(city);
+                var currentCityMarker = new GMarkerGoogle(currentCityLatLng, GMarkerGoogleType.blue_small);
+                currentCityMarker.ToolTipText = $"ID: {city.CityId}\n" +
+                    (string.IsNullOrEmpty(city.Name) ? $"Name: {city.Name }\n" : "") +
+                    $"Package Weight: {city.PackageWeigth}"; 
 
                 routePoints.Add(currentCityLatLng);
                 routeOverlay.Markers.Add(currentCityMarker);
@@ -124,41 +184,37 @@ namespace CourierRoadsApp
             gmap.Refresh();
         }
 
-        private void CreateRouteButton_Click(object sender, EventArgs e)
-        {
-            var routeOverlay = new GMapOverlay("route");
-
-            var routePoints = new List<PointLatLng>();
-            routePoints.Add(new PointLatLng(52.429855, 16.877080));
-            routePoints.Add(new PointLatLng(50.052931, 19.968094));
-            routePoints.Add(new PointLatLng(54.358358, 18.650220));
-            routePoints.Add(new PointLatLng(52.232178, 20.998432));
-
-            GMapRoute gMapRoute = new GMapRoute(routePoints, "Fajna trasa");
-            gMapRoute.Stroke = new Pen(Color.Red, 3);
-            routeOverlay.Routes.Add(gMapRoute);
-
-            var marker = new GMarkerGoogle(
-                new PointLatLng(52.429855, 16.877080),
-                GMarkerGoogleType.blue_pushpin);
-
-            marker.ToolTipText = "Dupa";
-
-            routeOverlay.Markers.Add(marker);
-
-            gmap.Overlays.Add(routeOverlay);
-            gmap.Refresh();
-        }
-
-        private void ClearRouteButton_Click(object sender, EventArgs e)
+        private void ClearMap()
         {
             gmap.Overlays.Clear();
             gmap.Refresh();
         }
 
+        private PointLatLng GetLocationDependingOnFileType(City city)
+        {
+            float latitude = 0;
+            float longtitude = 0;
+
+            switch (currentFileType)
+            {
+                case FileTypeEnum.CityList:
+                    latitude = city.CoordinateY;
+                    longtitude = city.CoordinateX;
+                    break;
+                case FileTypeEnum.GeneratedPoints:
+                    latitude = city.CoordinateY / 100;
+                    longtitude = city.CoordinateX / 100;
+                    break;
+                default:
+                    break;
+            }
+            return new PointLatLng(latitude, longtitude);
+        }
+
         private void StatisticsButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Statistics:\nPath length: {currentPath.GetTotalLengthOfPath().ToString()}", "Statistics", MessageBoxButtons.OK);
+            MessageBox.Show($"Statistics:\nPath length: {currentPath.GetTotalLengthOfPath().ToString()}" +
+                $"\nTime taken: {Statistics.LastExecutionTimeMiliSeconds}ms", "Statistics", MessageBoxButtons.OK);
         }
     }
 }

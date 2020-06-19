@@ -216,7 +216,7 @@ namespace Helpers.Structures
             var path = new List<City>();
 
             var edges = this.GetAllEdges();
-            var isDuplicateInPath = new bool[Int32.MaxValue];
+            var isDuplicateInPath = new bool[short.MaxValue];
 
             foreach (var edge in edges)
             {

@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.gmap = new GMap.NET.WindowsForms.GMapControl();
-            this.CreateRouteButton = new System.Windows.Forms.Button();
-            this.ClearRouteButton = new System.Windows.Forms.Button();
             this.LoadFileButton = new System.Windows.Forms.Button();
             this.FileTypeComboBox = new System.Windows.Forms.ComboBox();
             this.HeuristicTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -38,6 +36,8 @@
             this.CalculateRouteButton = new System.Windows.Forms.Button();
             this.FileTypeLabel = new System.Windows.Forms.Label();
             this.StatisticsButton = new System.Windows.Forms.Button();
+            this.StartingCityTextBox = new System.Windows.Forms.TextBox();
+            this.StartingCityLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gmap
@@ -65,26 +65,6 @@
             this.gmap.Size = new System.Drawing.Size(554, 426);
             this.gmap.TabIndex = 0;
             this.gmap.Zoom = 0D;
-            // 
-            // CreateRouteButton
-            // 
-            this.CreateRouteButton.Location = new System.Drawing.Point(572, 393);
-            this.CreateRouteButton.Name = "CreateRouteButton";
-            this.CreateRouteButton.Size = new System.Drawing.Size(94, 23);
-            this.CreateRouteButton.TabIndex = 1;
-            this.CreateRouteButton.Text = "Create Route";
-            this.CreateRouteButton.UseVisualStyleBackColor = true;
-            this.CreateRouteButton.Click += new System.EventHandler(this.CreateRouteButton_Click);
-            // 
-            // ClearRouteButton
-            // 
-            this.ClearRouteButton.Location = new System.Drawing.Point(572, 423);
-            this.ClearRouteButton.Name = "ClearRouteButton";
-            this.ClearRouteButton.Size = new System.Drawing.Size(94, 25);
-            this.ClearRouteButton.TabIndex = 2;
-            this.ClearRouteButton.Text = "Clear Route";
-            this.ClearRouteButton.UseVisualStyleBackColor = true;
-            this.ClearRouteButton.Click += new System.EventHandler(this.ClearRouteButton_Click);
             // 
             // LoadFileButton
             // 
@@ -154,11 +134,30 @@
             this.StatisticsButton.Visible = false;
             this.StatisticsButton.Click += new System.EventHandler(this.StatisticsButton_Click);
             // 
+            // StartingCityTextBox
+            // 
+            this.StartingCityTextBox.Location = new System.Drawing.Point(657, 354);
+            this.StartingCityTextBox.Name = "StartingCityTextBox";
+            this.StartingCityTextBox.Size = new System.Drawing.Size(50, 20);
+            this.StartingCityTextBox.TabIndex = 10;
+            this.StartingCityTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // StartingCityLabel
+            // 
+            this.StartingCityLabel.AutoSize = true;
+            this.StartingCityLabel.Location = new System.Drawing.Point(583, 357);
+            this.StartingCityLabel.Name = "StartingCityLabel";
+            this.StartingCityLabel.Size = new System.Drawing.Size(63, 13);
+            this.StartingCityLabel.TabIndex = 11;
+            this.StartingCityLabel.Text = "Starting City";
+            // 
             // CourierRoadsAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.StartingCityLabel);
+            this.Controls.Add(this.StartingCityTextBox);
             this.Controls.Add(this.StatisticsButton);
             this.Controls.Add(this.FileTypeLabel);
             this.Controls.Add(this.CalculateRouteButton);
@@ -166,8 +165,6 @@
             this.Controls.Add(this.HeuristicTypeComboBox);
             this.Controls.Add(this.FileTypeComboBox);
             this.Controls.Add(this.LoadFileButton);
-            this.Controls.Add(this.ClearRouteButton);
-            this.Controls.Add(this.CreateRouteButton);
             this.Controls.Add(this.gmap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -182,8 +179,6 @@
         #endregion
 
         private GMap.NET.WindowsForms.GMapControl gmap;
-        private System.Windows.Forms.Button CreateRouteButton;
-        private System.Windows.Forms.Button ClearRouteButton;
         private System.Windows.Forms.Button LoadFileButton;
         private System.Windows.Forms.ComboBox FileTypeComboBox;
         private System.Windows.Forms.ComboBox HeuristicTypeComboBox;
@@ -191,6 +186,8 @@
         private System.Windows.Forms.Button CalculateRouteButton;
         private System.Windows.Forms.Label FileTypeLabel;
         private System.Windows.Forms.Button StatisticsButton;
+        private System.Windows.Forms.TextBox StartingCityTextBox;
+        private System.Windows.Forms.Label StartingCityLabel;
     }
 }
 
