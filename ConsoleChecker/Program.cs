@@ -13,14 +13,10 @@ namespace ConsoleChecker
             var cityPath = "miasta.txt";
             var connectionsPath = "polaczenia.txt";
 
-            var mainHelper = new MainHelper();
+            var loadedData = FileLoader.LoadCitiesFromCityFiles(cityPath, connectionsPath);
 
-            mainHelper.InitiateMap(cityPath, connectionsPath);
-            //mainHelper.InitiateTest(filepath);
+            Console.WriteLine(MaxPossiblePathsHelper.GetMaxPossiblePathsAmount(116, 118, loadedData));
 
-            var path = mainHelper.ILS(1);
-            var x = path.GetTotalLengthOfPath();
-            Console.WriteLine(x);
         }
     }
 }

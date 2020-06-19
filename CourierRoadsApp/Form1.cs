@@ -26,6 +26,9 @@ namespace CourierRoadsApp
         private Dictionary<int, City> loadedData = null;
         private int startingCityId = 1;
 
+        private Dictionary<int, City> dataForMaxPossiblePaths = null;
+
+
 
         public CourierRoadsAppForm()
         {
@@ -78,6 +81,24 @@ namespace CourierRoadsApp
                                     return;
                                 }
                                 loadedData = FileLoader.LoadCitiesFromCityFiles(filePaths[0], filePaths[1]);
+                                dataForMaxPossiblePaths = new Dictionary<int, City>();
+                                foreach(var city in loadedData)
+                                {
+                                    dataForMaxPossiblePaths.Add(city.Key, new City
+                                    {
+                                        CityId = city.Value.CityId,
+                                        CoordinateX = city.Value.CoordinateX,
+                                        CoordinateY = city.Value.CoordinateY,
+                                        Name = city.Value.Name,
+                                        PackageWeigth = city.Value.PackageWeigth,
+                                    });
+
+                                    foreach(var connection in city.Value.Connections)
+                                    {
+                                        dataForMaxPossiblePaths[city.Key].Connections.Add(connection.Key, connection.Value);
+                                    }
+                                }
+
                                 ShortestPathHelper.FillRealDistances(loadedData);
                             }
                             break;
