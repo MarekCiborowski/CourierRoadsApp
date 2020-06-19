@@ -18,7 +18,7 @@ namespace Helpers
             
         }
 
-        public Path GeneratePath(int startingCityId)
+        public Path GenerateRandomPath(int startingCityId)
         {
             //var bestPath = new Path();
             //bestPath.GeneratePath(startingCityId, citiesDictionary);
@@ -38,12 +38,21 @@ namespace Helpers
             //return bestPath;
 
             var firstPath = new Path();
-            var secondPath = new Path();
+            //var secondPath = new Path();
 
-            firstPath.GeneratePath(startingCityId, citiesDictionary);
-            secondPath.GeneratePath(startingCityId, citiesDictionary);
+            firstPath.GenerateRandomPath(startingCityId, citiesDictionary);
+            //secondPath.GenerateRandomPath(startingCityId, citiesDictionary);
 
-            return firstPath.GetTotalLengthOfPath() < secondPath.GetTotalLengthOfPath() ? firstPath : secondPath;
+            //return firstPath.GetTotalLengthOfPath() < secondPath.GetTotalLengthOfPath() ? firstPath : secondPath;
+            return firstPath;
+        }
+
+        public Path GenerateGreedyPath(int startingCityId)
+        {
+            var path = new Path();
+            path.GeneratePath(startingCityId, citiesDictionary);
+
+            return path;
         }
 
         public Path ILS(int startingCityId)
@@ -54,14 +63,16 @@ namespace Helpers
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < 2; i++)
             {
-                var pathLocal = GeneratePath(startingCityId);
+                //var pathLocal = GenerateGreedyPath(startingCityId);
+                var pathLocal = GenerateRandomPath(startingCityId);
                 LocalSearchHelper.LocalSearch(pathLocal, citiesDictionary);
                 var pathLocalLength = pathLocal.GetTotalLengthOfPath();
                 
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j < 15; j++)
                 {
-                    if (stopwatch.Elapsed.Seconds > 17)
+                    if (stopwatch.Elapsed.Seconds > 19)
                     {
+
                         stopwatch.Stop();
                         return bestPath;
                     }
@@ -87,6 +98,7 @@ namespace Helpers
                 }
             }
 
+            var x = stopwatch.Elapsed.Seconds;
             stopwatch.Stop();
             return bestPath;
 
@@ -95,7 +107,8 @@ namespace Helpers
         public Path Basic_VNS(int startingCityId)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            var bestPath = GeneratePath(startingCityId);
+            //var bestPath = GenerateRandomPath(startingCityId);
+            var bestPath = GenerateGreedyPath(startingCityId);
             var bestPathLength = bestPath.GetTotalLengthOfPath();
 
             while(true)

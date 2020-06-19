@@ -14,7 +14,7 @@ namespace ConsoleChecker
 
             mainHelper.Initiate(filepath);
 
-            var path = mainHelper.Basic_VNS(1);
+            var path = mainHelper.ILS(1);
             var x = path.GetTotalLengthOfPath();
             Console.WriteLine(x);
         }

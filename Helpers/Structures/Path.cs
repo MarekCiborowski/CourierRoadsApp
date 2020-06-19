@@ -28,7 +28,7 @@ namespace Helpers.Structures
             };
         }
 
-        public void GeneratePath(int startingCityId, Dictionary<int, City> _citiesDictionary)
+        public void GenerateRandomPath(int startingCityId, Dictionary<int, City> _citiesDictionary)
         {
             this.citiesDictionary = _citiesDictionary;
             this.startingCityId = startingCityId;
@@ -43,13 +43,37 @@ namespace Helpers.Structures
 
             while (numberOfCitiesOutsidePath != 0)
             {
-                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 3);
+                var closestNeighboursIds = GetClosestNeighboursIdsOfLastElement(lastElementId, 2);
                 var randomCityIndex = closestNeighboursIds.ElementAt(random.Next(closestNeighboursIds.Count));            //taking one random city from best results
 
                 AddCityToPath(lastElementId, randomCityIndex);
                 numberOfCitiesOutsidePath--;
                 lastElementId = randomCityIndex;
             }
+        }
+
+        public void GeneratePath(int startingCityId, Dictionary<int,City> _citiesDictionary)
+        {
+            this.citiesDictionary = _citiesDictionary;
+            this.startingCityId = startingCityId;
+
+            wholePath = new Dictionary<int, CityInPath>();
+            var startingCity = new CityInPath(startingCityId);
+            wholePath.Add(startingCityId, startingCity);
+
+            var numberOfCitiesOutsidePath = GetCityIdsOutsidePath().Count();
+            var random = new Random();
+            var lastElementId = startingCityId;
+
+            while (numberOfCitiesOutsidePath != 0)
+            {
+                var closestNeighbourId = GetLastElementClosestNeighbourId(lastElementId);
+
+                AddCityToPath(lastElementId, closestNeighbourId);
+                numberOfCitiesOutsidePath--;
+                lastElementId = closestNeighbourId;
+            }
+
         }
 
         public void GeneratePathSecond(int startingCityId, Dictionary<int, City> _citiesDictionary)
@@ -145,6 +169,20 @@ namespace Helpers.Structures
                 .ToList();
 
             return closestNeighboursIds;
+        }
+
+        public int GetLastElementClosestNeighbourId(int lastElementId)
+        {
+            var lastElement = citiesDictionary[lastElementId];
+            var cityIdsOutsidePath = GetCityIdsOutsidePath();
+
+            var closestNeighbourId = lastElement.Connections
+                .Where(c => cityIdsOutsidePath.Contains(c.Key))                             //only cities that have not been added already
+                .OrderBy(c => c.Value)
+                .Select(c => c.Key)
+                .FirstOrDefault();
+
+            return closestNeighbourId;
         }
 
         //public void InsertAt(CityInPath city, int index)
