@@ -72,8 +72,8 @@ namespace Helpers
                 {
                     if (stopwatch.Elapsed.Seconds > 19)
                     {
-
                         stopwatch.Stop();
+                        Statistics.LastExecutionTime = stopwatch.Elapsed;
                         return bestPath;
                     }
 
@@ -119,6 +119,7 @@ namespace Helpers
                     if (stopwatch.Elapsed.Seconds > 18)
                     {
                         stopwatch.Stop();
+                        Statistics.LastExecutionTime = stopwatch.Elapsed;
                         return bestPath;
                     }
 
