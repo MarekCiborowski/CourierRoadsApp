@@ -20,7 +20,7 @@ namespace Helpers
         public void InitiateMap(string filepathCity, string filepathConnections )
         {
             citiesDictionary = FileLoader.LoadCitiesFromCityFiles(filepathCity, filepathConnections);
-            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
+            citiesDictionary = ShortestPathHelper.FillRealDistances(citiesDictionary);
 
 
         }
