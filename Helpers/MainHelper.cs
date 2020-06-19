@@ -14,7 +14,11 @@ namespace Helpers
         {
             this.citiesDictionary = citiesDictionary;
         }
-
+        public void InitiateMap(string filepathCity, string filepathConnections)
+        {
+            citiesDictionary = FileLoader.LoadCitiesFromCityFiles(filepathCity, filepathConnections);
+            citiesDictionary = ShortestPathHelper.FillRealDistances(citiesDictionary);
+        }
         public Path GenerateRandomPath(int startingCityId)
         {
             //var bestPath = new Path();
