@@ -10,12 +10,19 @@ namespace Helpers
     {
         private Dictionary<int, City> citiesDictionary;
 
-        public void Initiate(string filepath)
+        public void InitiateTest(string filepath)
         {
             citiesDictionary = FileLoader.LoadCitiesFromTestFile(filepath);
             citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
 
             
+        }
+        public void InitiateMap(string filepathCity, string filepathConnections )
+        {
+            citiesDictionary = FileLoader.LoadCitiesFromCityFiles(filepathCity, filepathConnections);
+            citiesDictionary = ShortestPathHelper.FillEuclideanDistances(citiesDictionary);
+
+
         }
 
         public Path GenerateRandomPath(int startingCityId)
