@@ -20,15 +20,20 @@ namespace CourierRoadsApp
 {
     public partial class CourierRoadsAppForm : Form
     {
+        private const string MARKERS_OVERLAY_NAME = "markers";
+        private const string ROUTE_OVERLAY_NAME = "route";
+
         private FileTypeEnum currentFileType = FileTypeEnum.CityList;
         private HeuristicTypeEnum currentHeuristic = HeuristicTypeEnum.ILS;
         private CourierPath currentPath = null;
+        private Dictionary<int, City> loadedDataWithoutFill = null;
         private Dictionary<int, City> loadedData = null;
         private int startingCityId = 1;
 
         private Dictionary<int, City> dataForMaxPossiblePaths = null;
 
-
+        private int maximumPathsCityFromId = 1;
+        private int maximumPathsCiyToId = 2;
 
         public CourierRoadsAppForm()
         {
@@ -81,24 +86,8 @@ namespace CourierRoadsApp
                                     return;
                                 }
                                 loadedData = FileLoader.LoadCitiesFromCityFiles(filePaths[0], filePaths[1]);
-                                dataForMaxPossiblePaths = new Dictionary<int, City>();
-                                foreach(var city in loadedData)
-                                {
-                                    dataForMaxPossiblePaths.Add(city.Key, new City
-                                    {
-                                        CityId = city.Value.CityId,
-                                        CoordinateX = city.Value.CoordinateX,
-                                        CoordinateY = city.Value.CoordinateY,
-                                        Name = city.Value.Name,
-                                        PackageWeigth = city.Value.PackageWeigth,
-                                    });
-
-                                    foreach(var connection in city.Value.Connections)
-                                    {
-                                        dataForMaxPossiblePaths[city.Key].Connections.Add(connection.Key, connection.Value);
-                                    }
-                                }
-
+                                loadedDataWithoutFill = FileLoader.CreateCopy(loadedData);
+                                
                                 ShortestPathHelper.FillRealDistances(loadedData);
                             }
                             break;
@@ -122,6 +111,7 @@ namespace CourierRoadsApp
                 }
 
                 CalculateRouteButton.Enabled = isAnyDataLoaded;
+                MaxPossiblePathsButton.Enabled = isAnyDataLoaded || currentFileType == FileTypeEnum.CityList;
             }
         }
 
@@ -155,6 +145,7 @@ namespace CourierRoadsApp
             }
 
             StatisticsButton.Visible = true;
+            HideMarkersButton.Visible = true;
         }
 
         private void FileTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -182,7 +173,8 @@ namespace CourierRoadsApp
                 return;
             }
 
-            var routeOverlay = new GMapOverlay("route");
+            var routeOverlay = new GMapOverlay(ROUTE_OVERLAY_NAME);
+            var markersOverlay = new GMapOverlay(MARKERS_OVERLAY_NAME);
             var routePoints = new List<PointLatLng>();
 
             foreach (var city in pathToDraw)
@@ -194,7 +186,8 @@ namespace CourierRoadsApp
                     $"Package Weight: {city.PackageWeigth}"; 
 
                 routePoints.Add(currentCityLatLng);
-                routeOverlay.Markers.Add(currentCityMarker);
+                markersOverlay.Markers.Add(currentCityMarker);
+                //routeOverlay.Markers.Add(currentCityMarker);
             }
 
             var mapRoute = new GMapRoute(routePoints, "Calculated Path");
@@ -202,6 +195,7 @@ namespace CourierRoadsApp
             routeOverlay.Routes.Add(mapRoute);
 
             gmap.Overlays.Add(routeOverlay);
+            gmap.Overlays.Add(markersOverlay);
             gmap.Refresh();
         }
 
@@ -236,6 +230,29 @@ namespace CourierRoadsApp
         {
             MessageBox.Show($"Statistics:\nPath length: {currentPath.GetTotalLengthOfPath().ToString()}" +
                 $"\nTime taken: {Statistics.LastExecutionTimeMiliSeconds}ms", "Statistics", MessageBoxButtons.OK);
+        }
+
+        private void HideMarkersButton_Click(object sender, EventArgs e)
+        {
+            var routesOverlay = gmap.Overlays.First(o => o.Id == MARKERS_OVERLAY_NAME);
+
+            routesOverlay.IsVisibile = !routesOverlay.IsVisibile;
+        }
+
+        private void MaxPossiblePathsButton_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(MPPCityFromTextBox.Text, out maximumPathsCityFromId) || maximumPathsCityFromId > loadedData.Count)
+            {
+                maximumPathsCityFromId = 1;
+            }
+            if (!int.TryParse(MPPCityToTextBox.Text, out maximumPathsCiyToId) || maximumPathsCiyToId > loadedData.Count)
+            {
+                maximumPathsCiyToId = 2;
+            }
+
+            var maxPaths = MaxPossiblePathsHelper.GetMaxPossiblePathsAmount(maximumPathsCityFromId, maximumPathsCiyToId, loadedDataWithoutFill);
+            
+            MessageBox.Show($"Maximum Paths: {maxPaths}", "Maximum Paths", MessageBoxButtons.OK);
         }
     }
 }

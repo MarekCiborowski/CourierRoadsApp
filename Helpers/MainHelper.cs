@@ -37,7 +37,7 @@ namespace Helpers
             var bestPathLength = int.MaxValue;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var pathLocal = GenerateRandomPath(startingCityId);
                 LocalSearchHelper.LocalSearch(pathLocal, citiesDictionary);

@@ -9,6 +9,30 @@ namespace Helpers
 {
     public class FileLoader
     {
+        public static Dictionary<int, City> CreateCopy(Dictionary<int, City> dict)
+        {
+            var result = new Dictionary<int, City>();
+
+            foreach (var city in dict)
+            {
+                result.Add(city.Key, new City
+                {
+                    CityId = city.Value.CityId,
+                    CoordinateX = city.Value.CoordinateX,
+                    CoordinateY = city.Value.CoordinateY,
+                    Name = city.Value.Name,
+                    PackageWeigth = city.Value.PackageWeigth,
+                });
+
+                foreach (var connection in city.Value.Connections)
+                {
+                    result[city.Key].Connections.Add(connection.Key, connection.Value);
+                }
+            }
+
+            return result;
+        }
+
         public static Dictionary<int,City> LoadCitiesFromTestFile(string filePath)
         {
             var citiesList = new Dictionary<int,City>();
