@@ -131,7 +131,7 @@
             // 
             // StatisticsButton
             // 
-            this.StatisticsButton.Location = new System.Drawing.Point(657, 215);
+            this.StatisticsButton.Location = new System.Drawing.Point(667, 215);
             this.StatisticsButton.Name = "StatisticsButton";
             this.StatisticsButton.Size = new System.Drawing.Size(75, 23);
             this.StatisticsButton.TabIndex = 9;
@@ -161,9 +161,9 @@
             // 
             this.HideMarkersButton.Location = new System.Drawing.Point(572, 215);
             this.HideMarkersButton.Name = "HideMarkersButton";
-            this.HideMarkersButton.Size = new System.Drawing.Size(79, 23);
+            this.HideMarkersButton.Size = new System.Drawing.Size(89, 23);
             this.HideMarkersButton.TabIndex = 12;
-            this.HideMarkersButton.Text = "Hide Markers";
+            this.HideMarkersButton.Text = "Switch Markers";
             this.HideMarkersButton.UseVisualStyleBackColor = true;
             this.HideMarkersButton.Visible = false;
             this.HideMarkersButton.Click += new System.EventHandler(this.HideMarkersButton_Click);
