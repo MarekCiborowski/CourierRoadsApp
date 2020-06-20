@@ -15,6 +15,9 @@ using CourierRoadsApp.Enums;
 using Helpers;
 using CourierPath = Helpers.Structures.Path;
 using Helpers.Structures;
+using SystemPath = System.IO.Path;
+using System.IO;
+using System.Diagnostics;
 
 namespace CourierRoadsApp
 {
@@ -29,8 +32,6 @@ namespace CourierRoadsApp
         private Dictionary<int, City> loadedDataWithoutFill = null;
         private Dictionary<int, City> loadedData = null;
         private int startingCityId = 1;
-
-        private Dictionary<int, City> dataForMaxPossiblePaths = null;
 
         private int maximumPathsCityFromId = 1;
         private int maximumPathsCiyToId = 2;
@@ -142,7 +143,7 @@ namespace CourierRoadsApp
                     break;
                 default:
                     break;
-            }
+            }            
 
             StatisticsButton.Visible = true;
             HideMarkersButton.Visible = true;
@@ -187,7 +188,6 @@ namespace CourierRoadsApp
 
                 routePoints.Add(currentCityLatLng);
                 markersOverlay.Markers.Add(currentCityMarker);
-                //routeOverlay.Markers.Add(currentCityMarker);
             }
 
             var mapRoute = new GMapRoute(routePoints, "Calculated Path");
@@ -197,6 +197,21 @@ namespace CourierRoadsApp
             gmap.Overlays.Add(routeOverlay);
             gmap.Overlays.Add(markersOverlay);
             gmap.Refresh();
+
+            WriteResultIntoTextFile(pathToDraw);
+        }
+
+        private void WriteResultIntoTextFile(List<City> pathToDraw)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var city in pathToDraw)
+                sb.Append(city.CityId.ToString() + ' ');
+
+            using (StreamWriter outputFile = File.CreateText("result.txt"))
+            {
+                outputFile.WriteLine(sb.ToString());
+                Process.Start("result.txt", "notepad");
+            }
         }
 
         private void ClearMap()
