@@ -68,13 +68,13 @@
             this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gmap.ShowTileGridLines = false;
-            this.gmap.Size = new System.Drawing.Size(554, 426);
+            this.gmap.Size = new System.Drawing.Size(1318, 837);
             this.gmap.TabIndex = 0;
             this.gmap.Zoom = 0D;
             // 
             // LoadFileButton
             // 
-            this.LoadFileButton.Location = new System.Drawing.Point(713, 65);
+            this.LoadFileButton.Location = new System.Drawing.Point(1478, 48);
             this.LoadFileButton.Name = "LoadFileButton";
             this.LoadFileButton.Size = new System.Drawing.Size(75, 23);
             this.LoadFileButton.TabIndex = 3;
@@ -85,7 +85,7 @@
             // FileTypeComboBox
             // 
             this.FileTypeComboBox.FormattingEnabled = true;
-            this.FileTypeComboBox.Location = new System.Drawing.Point(586, 65);
+            this.FileTypeComboBox.Location = new System.Drawing.Point(1351, 48);
             this.FileTypeComboBox.Name = "FileTypeComboBox";
             this.FileTypeComboBox.Size = new System.Drawing.Size(121, 21);
             this.FileTypeComboBox.TabIndex = 4;
@@ -94,7 +94,7 @@
             // HeuristicTypeComboBox
             // 
             this.HeuristicTypeComboBox.FormattingEnabled = true;
-            this.HeuristicTypeComboBox.Location = new System.Drawing.Point(632, 135);
+            this.HeuristicTypeComboBox.Location = new System.Drawing.Point(1397, 118);
             this.HeuristicTypeComboBox.Name = "HeuristicTypeComboBox";
             this.HeuristicTypeComboBox.Size = new System.Drawing.Size(121, 21);
             this.HeuristicTypeComboBox.TabIndex = 5;
@@ -103,7 +103,7 @@
             // HeuristicTypeLabel
             // 
             this.HeuristicTypeLabel.AutoSize = true;
-            this.HeuristicTypeLabel.Location = new System.Drawing.Point(654, 119);
+            this.HeuristicTypeLabel.Location = new System.Drawing.Point(1419, 102);
             this.HeuristicTypeLabel.Name = "HeuristicTypeLabel";
             this.HeuristicTypeLabel.Size = new System.Drawing.Size(75, 13);
             this.HeuristicTypeLabel.TabIndex = 6;
@@ -112,7 +112,7 @@
             // CalculateRouteButton
             // 
             this.CalculateRouteButton.Enabled = false;
-            this.CalculateRouteButton.Location = new System.Drawing.Point(696, 184);
+            this.CalculateRouteButton.Location = new System.Drawing.Point(1461, 167);
             this.CalculateRouteButton.Name = "CalculateRouteButton";
             this.CalculateRouteButton.Size = new System.Drawing.Size(99, 23);
             this.CalculateRouteButton.TabIndex = 7;
@@ -123,7 +123,7 @@
             // FileTypeLabel
             // 
             this.FileTypeLabel.AutoSize = true;
-            this.FileTypeLabel.Location = new System.Drawing.Point(583, 49);
+            this.FileTypeLabel.Location = new System.Drawing.Point(1348, 32);
             this.FileTypeLabel.Name = "FileTypeLabel";
             this.FileTypeLabel.Size = new System.Drawing.Size(50, 13);
             this.FileTypeLabel.TabIndex = 8;
@@ -131,7 +131,7 @@
             // 
             // StatisticsButton
             // 
-            this.StatisticsButton.Location = new System.Drawing.Point(667, 215);
+            this.StatisticsButton.Location = new System.Drawing.Point(1432, 198);
             this.StatisticsButton.Name = "StatisticsButton";
             this.StatisticsButton.Size = new System.Drawing.Size(75, 23);
             this.StatisticsButton.TabIndex = 9;
@@ -142,7 +142,7 @@
             // 
             // StartingCityTextBox
             // 
-            this.StartingCityTextBox.Location = new System.Drawing.Point(640, 186);
+            this.StartingCityTextBox.Location = new System.Drawing.Point(1405, 169);
             this.StartingCityTextBox.Name = "StartingCityTextBox";
             this.StartingCityTextBox.Size = new System.Drawing.Size(50, 20);
             this.StartingCityTextBox.TabIndex = 10;
@@ -151,7 +151,7 @@
             // StartingCityLabel
             // 
             this.StartingCityLabel.AutoSize = true;
-            this.StartingCityLabel.Location = new System.Drawing.Point(571, 189);
+            this.StartingCityLabel.Location = new System.Drawing.Point(1336, 172);
             this.StartingCityLabel.Name = "StartingCityLabel";
             this.StartingCityLabel.Size = new System.Drawing.Size(63, 13);
             this.StartingCityLabel.TabIndex = 11;
@@ -159,7 +159,7 @@
             // 
             // HideMarkersButton
             // 
-            this.HideMarkersButton.Location = new System.Drawing.Point(572, 215);
+            this.HideMarkersButton.Location = new System.Drawing.Point(1337, 198);
             this.HideMarkersButton.Name = "HideMarkersButton";
             this.HideMarkersButton.Size = new System.Drawing.Size(89, 23);
             this.HideMarkersButton.TabIndex = 12;
@@ -170,7 +170,7 @@
             // 
             // MPPCityFromTextBox
             // 
-            this.MPPCityFromTextBox.Location = new System.Drawing.Point(632, 304);
+            this.MPPCityFromTextBox.Location = new System.Drawing.Point(1397, 287);
             this.MPPCityFromTextBox.Name = "MPPCityFromTextBox";
             this.MPPCityFromTextBox.Size = new System.Drawing.Size(40, 20);
             this.MPPCityFromTextBox.TabIndex = 13;
@@ -178,7 +178,7 @@
             // 
             // MPPCityToTextBox
             // 
-            this.MPPCityToTextBox.Location = new System.Drawing.Point(632, 343);
+            this.MPPCityToTextBox.Location = new System.Drawing.Point(1397, 326);
             this.MPPCityToTextBox.Name = "MPPCityToTextBox";
             this.MPPCityToTextBox.Size = new System.Drawing.Size(40, 20);
             this.MPPCityToTextBox.TabIndex = 14;
@@ -187,7 +187,7 @@
             // MPPCityFromLabel
             // 
             this.MPPCityFromLabel.AutoSize = true;
-            this.MPPCityFromLabel.Location = new System.Drawing.Point(576, 307);
+            this.MPPCityFromLabel.Location = new System.Drawing.Point(1341, 290);
             this.MPPCityFromLabel.Name = "MPPCityFromLabel";
             this.MPPCityFromLabel.Size = new System.Drawing.Size(50, 13);
             this.MPPCityFromLabel.TabIndex = 15;
@@ -196,7 +196,7 @@
             // MPPCityToLabel
             // 
             this.MPPCityToLabel.AutoSize = true;
-            this.MPPCityToLabel.Location = new System.Drawing.Point(583, 346);
+            this.MPPCityToLabel.Location = new System.Drawing.Point(1348, 329);
             this.MPPCityToLabel.Name = "MPPCityToLabel";
             this.MPPCityToLabel.Size = new System.Drawing.Size(40, 13);
             this.MPPCityToLabel.TabIndex = 16;
@@ -205,7 +205,7 @@
             // MaxPossiblePathsButton
             // 
             this.MaxPossiblePathsButton.Enabled = false;
-            this.MaxPossiblePathsButton.Location = new System.Drawing.Point(678, 304);
+            this.MaxPossiblePathsButton.Location = new System.Drawing.Point(1443, 287);
             this.MaxPossiblePathsButton.Name = "MaxPossiblePathsButton";
             this.MaxPossiblePathsButton.Size = new System.Drawing.Size(75, 59);
             this.MaxPossiblePathsButton.TabIndex = 17;
@@ -217,7 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1584, 861);
             this.Controls.Add(this.MaxPossiblePathsButton);
             this.Controls.Add(this.MPPCityToLabel);
             this.Controls.Add(this.MPPCityFromLabel);
